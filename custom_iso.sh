@@ -1,12 +1,26 @@
 #!/bin/bash
 
 # https://wiki.debian.org/RepackBootableISO
-
-# The example names get mapped to their roles here
-orig_iso="$HOME"/debian-12.10.0-amd64-netinst.iso
-new_files=/tmp/debisocustom
-new_iso="$HOME"/preseed-debian-12.10.0-amd64-netinst.iso
+working_dir=`pwd`
+echo $working_dir
+orig_iso=debian-12.10.0-amd64-netinst.iso
+orig_iso_mnt=/tmp/debian
+custom_files=/tmp/custom_debian
+new_iso=preseed-$orig_iso
 mbr_template=isohdpfx.bin
+
+# download Debian ISO if it doesn't exist already
+if [ ! -f $orig_iso ]; then
+   wget https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/$orig_iso
+fi
+
+# mount and unpack ISO
+mkdir -p $orig_iso_mnt
+sudo mount -o loop $orig_iso $orig_iso_mnt
+mkdir -p $custom_files
+cd $orig_iso_mnt && sudo tar cf - . | (cd $custom_files; tar xfp -)
+
+cd $working_dir
 
 # Extract MBR template file to disk
 dd if="$orig_iso" bs=1 count=432 of="$mbr_template"
@@ -23,4 +37,4 @@ xorriso -as mkisofs \
    -eltorito-alt-boot \
    -e boot/grub/efi.img \
    -no-emul-boot -isohybrid-gpt-basdat -isohybrid-apm-hfsplus \
-   "$new_files"
+   "$custom_files"
