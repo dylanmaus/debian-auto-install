@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # https://wiki.debian.org/RepackBootableISO
+
 working_dir=`pwd`
 echo $working_dir
 orig_iso=debian-12.10.0-amd64-netinst.iso
@@ -8,17 +9,26 @@ orig_iso_mnt=/tmp/debian
 custom_files=/tmp/custom_debian
 new_iso=preseed-$orig_iso
 mbr_template=isohdpfx.bin
+preseed_url=http://192.168.1.7:8000/preseed/preseed.cfg
 
 # download Debian ISO if it doesn't exist already
 if [ ! -f $orig_iso ]; then
    wget https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/$orig_iso
 fi
+# sudo chown -R $USER $custom_files
 
 # mount and unpack ISO
 mkdir -p $orig_iso_mnt
-sudo mount -o loop $orig_iso $orig_iso_mnt
+sudo mount -t iso9660 -o loop $orig_iso $orig_iso_mnt
 mkdir -p $custom_files
 cd $orig_iso_mnt && sudo tar cf - . | (cd $custom_files; tar xfp -)
+sudo chmod 777 -R $custom_files
+
+# modify grub.cfg to auto install with preseed 
+old_line="linux    /install.amd/vmlinuz vga=788 --- quiet"
+new_line="linux    /install.amd/vmlinuz preseed/url=$preseed_url auto=true priority=critical vga=788 --- quiet"
+sed -i s"|$old_line|$new_line|g" $custom_files/boot/grub/grub.cfg
+echo "set timeout=2" >> $custom_files/boot/grub/grub.cfg
 
 cd $working_dir
 
@@ -38,3 +48,8 @@ xorriso -as mkisofs \
    -e boot/grub/efi.img \
    -no-emul-boot -isohybrid-gpt-basdat -isohybrid-apm-hfsplus \
    "$custom_files"
+
+# unmount and delete temporary files
+sudo umount $orig_iso_mnt
+sudo rm -r $orig_iso_mnt
+sudo rm -r $custom_files
