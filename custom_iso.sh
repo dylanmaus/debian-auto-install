@@ -34,7 +34,7 @@ dd if=$orig_iso bs=1 count=432 of=$mbr_template
 # create new ISO image
 xorriso -as mkisofs \
    -r -V 'Debian 12.10.0 amd64 n' \
-   -o "$new_iso" \
+   -o $new_iso \
    -J -J -joliet-long -cache-inodes \
    -isohybrid-mbr $mbr_template \
    -b isolinux/isolinux.bin \
