@@ -7,6 +7,7 @@ custom_files=/tmp/custom_debian
 new_iso=preseed-"$orig_iso"
 mbr_template=isohdpfx.bin
 preseed_url=http://192.168.1.7:8000/preseed/preseed.cfg
+network_interface=enp4s0
 
 # download Debian ISO if it doesn't exist already
 if [ ! -f "$orig_iso" ]; then
@@ -22,7 +23,7 @@ sudo chmod 777 -R "$custom_files"
 
 # modify grub.cfg to auto install with preseed 
 old_line="linux    /install.amd/vmlinuz vga=788 --- quiet"
-new_line="linux    /install.amd/vmlinuz preseed/url="$preseed_url" auto=true priority=critical vga=788 --- quiet"
+new_line="linux    /install.amd/vmlinuz preseed/url="$preseed_url" interface="$network_interface" auto=true priority=critical vga=788 --- quiet"
 sed -i s"|$old_line|$new_line|g" "$custom_files"/boot/grub/grub.cfg
 echo "set timeout=2" >> "$custom_files"/boot/grub/grub.cfg
 
