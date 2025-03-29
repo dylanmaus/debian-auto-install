@@ -1,13 +1,31 @@
 # Debian auto install
 Debian auto install with full disk encryption
 
-## Repack bootable ISO
+## Create custom ISO
+1. download Debian ISO
+2. mount and unpack
+3. add preseed URL and network interface to `/boot/grub/grub.cfg`
+4. repack bootable ISO
 
-## Helpful links
-https://wiki.debian.org/RepackBootableISO
+```
+bash create-custom-iso.sh
+```
+
+## Populate preseed
+```
+bash populate_preseed.sh
+```
+
+## Serve preseed on network
+```
+python3 -m http.server 8000
+```
 
 ## Write ISO to a drive
 ```
 lsblk
 sudo dd if=preseed-debian-12.10.0-amd64-netinst.iso of=/dev/sdX
 ```
+
+## Helpful links
+https://wiki.debian.org/RepackBootableISO
