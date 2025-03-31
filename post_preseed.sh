@@ -1,9 +1,9 @@
 #!/bin/bash
 
 username=user
-
-# add user to sudoers
-adduser "$username" sudo
+client=`echo $USER`
+server=machine0
+ssh_public_key=`cat /Users/"$client"/.ssh/"$server".pub`
 
 # configure dropbear
 apt update
@@ -11,7 +11,7 @@ apt install -y dropbear-initramfs
 echo 'DROPBEAR_OPTIONS="-I 180 -j -k -p 2222 -s -c cryptroot-unlock"' >> /etc/dropbear/initramfs/dropbear.conf
 
 # add ssh public key to authorized keys
-echo ssh-ed25519 asdfzxcv user@machine > /etc/dropbear/initramfs/authorized_keys
+echo "$ssh_public_key" > /etc/dropbear/initramfs/authorized_keys
 
 echo 'IP="dhcp"' >> /etc/initramfs-tools/initramfs.conf
 update-initramfs -u -k all

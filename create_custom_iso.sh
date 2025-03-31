@@ -6,7 +6,7 @@ orig_iso_mnt=/tmp/debian
 custom_files=/tmp/custom_debian
 new_iso=preseed-"$orig_iso"
 mbr_template=isohdpfx.bin
-preseed_url=http://192.168.1.7:8000/preseed/preseed.cfg
+preseed_url=http://192.168.1.7:8000/preseed.cfg
 network_interface=enp4s0
 
 # download Debian ISO if it doesn't exist already

@@ -1,13 +1,15 @@
 #!/bin/bash
 
-preseed_name=machine
+preseed_name=machine2
 filename="$preseed_name"-preseed.cfg
-username=username
+username=user
 userpassword=userpassword
 rootpassword=rootpassword
 cryptopassword=`openssl rand -base64 32 | sed -r 's/[/=]/_/g'`
 disk=/dev/nvme1n1
 url=http://192.168.1.7:8000/post_preseed.sh
+
+echo -n "$cryptopassword" > "$preseed_name"
 
 cp default_preseed.cfg "$filename"
 
