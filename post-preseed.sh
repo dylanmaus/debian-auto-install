@@ -5,6 +5,8 @@ client=`echo $USER`
 server=machine0
 ssh_public_key=`cat /Users/"$client"/.ssh/"$server".pub`
 
+adduser "$user" sudo
+
 # configure dropbear
 apt update
 apt install -y dropbear-initramfs

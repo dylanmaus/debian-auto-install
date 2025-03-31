@@ -7,7 +7,9 @@ userpassword=userpassword
 rootpassword=rootpassword
 cryptopassword=`openssl rand -base64 32 | sed -r 's/[/=]/_/g'`
 disk=/dev/sda
-url=http://192.168.1.7:8000/post_preseed.sh
+post_preseed_url=http://192.168.1.7:8000/post_preseed.sh
+
+. $1
 
 echo -n "$cryptopassword" > "$preseed_name"
 

@@ -1,13 +1,19 @@
 #!/bin/bash
 
 working_dir=`pwd`
-orig_iso=debian-12.10.0-amd64-netinst.iso
 orig_iso_mnt=/tmp/debian
 custom_files=/tmp/custom_debian
-new_iso=preseed-"$orig_iso"
 mbr_template=isohdpfx.bin
-preseed_url=http://192.168.1.7:8000/preseed.cfg
-network_interface=enp4s0
+
+name=default-name
+orig_iso=default-iso
+new_iso="$name"-"$orig_iso"
+preseed_url=default-url
+network_interface=default-interface
+
+# get variables from config file
+# create_custom_iso.sh machine0.conf
+. $1
 
 # download Debian ISO if it doesn't exist already
 if [ ! -f "$orig_iso" ]; then
