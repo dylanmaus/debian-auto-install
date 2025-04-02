@@ -16,9 +16,9 @@ network_interface=default-interface
 . $1
 
 # download Debian ISO if it doesn't exist already
-if [ ! -f "$orig_iso" ]; then
-   wget https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/"$orig_iso"
-fi
+# if [ ! -f "$orig_iso" ]; then
+#    wget https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/"$orig_iso"
+# fi
 
 # mount and unpack ISO
 mkdir -p "$orig_iso_mnt"

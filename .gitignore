@@ -1,2 +1,4 @@
 *.iso
 isohdpfx.bin
+*.key
+custom-preseed.cfg
