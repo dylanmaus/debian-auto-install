@@ -1,4 +1,5 @@
 *.iso
-isohdpfx.bin
 *.key
-custom-preseed.cfg
+preseed.cfg
+isohdpfx.bin
+dropbear.conf
