@@ -19,4 +19,4 @@ sed -i s"|defaultdisk|$disk|g" "$name"/preseed.cfg
 sed -i s"|defaultcryptopassword|$crypto_password|g" "$name"/preseed.cfg
 
 # populate post preseed url
-sed -i s"|defaulturl|$preseed_url|g" "$name"/preseed.cfg
+sed -i s"|defaulturl|$url|g" "$name"/preseed.cfg

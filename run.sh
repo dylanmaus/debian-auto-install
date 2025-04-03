@@ -24,18 +24,23 @@ if [ ! -f "$orig_iso" ]; then
    wget https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/"$orig_iso"
 fi
 
+# populate preseed.cfg
+cp default-preseed.cfg "$name"/preseed.cfg
+./populate-preseed.sh $1 "$user_password" "$root_password" "$crypto_password"
+
+# copy files to tmphost to serve during install
+cp ./"$name"/preseed.cfg ./tmphost
+cp ./"$name"/dropbear.conf ./tmphost
+cp ./post-preseed.sh ./tmphost
+
 # mount and unpack ISO to modifiable location
 ./mount-unpack-iso.sh "$orig_iso"
 
 # modify grub.cfg to auto install with preseed
-./modify-grub.sh "$preseed_url" "$network_interface"
+./modify-grub.sh "$url" "$network_interface"
 
 # repack bootable ISO
 ./repack-bootable-iso.sh "$orig_iso" "$name"/"$new_iso"
-
-# populate preseed.cfg
-cp default-preseed.cfg "$name"/preseed.cfg
-./populate-preseed.sh $1 "$user_password" "$root_password" "$crypto_password"
 
 # unmount and delete temporary files
 orig_iso_mnt=/tmp/debian
