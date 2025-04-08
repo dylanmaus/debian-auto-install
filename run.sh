@@ -7,7 +7,8 @@
 read -p "Enter user password: " user_password
 
 # create files containing generated keys
-crypto_password=`openssl rand -base64 32 | sed -r 's/[/=]/_/g'`
+# crypto_password=`openssl rand -base64 32 | sed -r 's/[/=]/_/g'`
+crypto_password=password
 root_password=`openssl rand -base64 32 | sed -r 's/[/=]/_/g'`
 echo -n "$crypto_password" > ./"$name"/crypto.key
 echo -n "$root_password" > ./"$name"/root.key
