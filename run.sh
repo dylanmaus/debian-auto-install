@@ -4,11 +4,10 @@
 . $1
 
 # get user password from input
-read -p "Enter user password: " user_password
+read -s -p "Enter user password: " user_password
 
 # create files containing generated keys
-# crypto_password=`openssl rand -base64 32 | sed -r 's/[/=]/_/g'`
-crypto_password=password
+crypto_password=`openssl rand -base64 32 | sed -r 's/[/=]/_/g'`
 root_password=`openssl rand -base64 32 | sed -r 's/[/=]/_/g'`
 echo -n "$crypto_password" > ./"$name"/crypto.key
 echo -n "$root_password" > ./"$name"/root.key
@@ -18,7 +17,7 @@ ssh-keygen -q -t ed25519 -N "" -f ~/.ssh/"$name" <<< y
 
 # create config for dropbear
 echo username="$username" > ./"$name"/dropbear.conf
-echo ssh_public_key=`cat ~/.ssh/machine0.pub` >> ./"$name"/dropbear.conf
+echo ssh_public_key=\"`cat ~/.ssh/machine0.pub`\" >> ./"$name"/dropbear.conf
 
 # download Debian ISO if it doesn't exist already
 if [ ! -f "$orig_iso" ]; then
