@@ -7,8 +7,17 @@
 read -s -p "Enter user password: " user_password
 
 # create files containing generated keys
+crypto_password=`openssl rand -base64 32 | sed -r 's/[/=]/_/g'`
 root_password=`openssl rand -base64 32 | sed -r 's/[/=]/_/g'`
+echo -n "$crypto_password" > ./"$name"/crypto.key
 echo -n "$root_password" > ./"$name"/root.key
+
+# create ssh key pair for dropbear
+ssh-keygen -q -t ed25519 -N "" -f ~/.ssh/"$name" <<< y
+
+# create config for dropbear
+echo username="$username" > ./"$name"/dropbear.conf
+echo ssh_public_key=\"`cat ~/.ssh/"$name".pub`\" >> ./"$name"/dropbear.conf
 
 # download Debian ISO if it doesn't exist already
 if [ ! -f "$orig_iso" ]; then
@@ -16,11 +25,13 @@ if [ ! -f "$orig_iso" ]; then
 fi
 
 # populate preseed.cfg
-cp default-preseed.cfg "$name"/preseed.cfg
-./populate-preseed.sh $1 "$user_password" "$root_password"
+cp default-crypto-preseed.cfg "$name"/preseed.cfg
+./populate-preseed.sh $1 "$user_password" "$root_password" "$crypto_password"
 
 # copy files to tmphost to serve during install
 cp ./"$name"/preseed.cfg ./tmphost
+cp ./"$name"/dropbear.conf ./tmphost
+cp ./post-preseed.sh ./tmphost
 
 # mount and unpack ISO to modifiable location
 ./mount-unpack-iso.sh "$orig_iso"
