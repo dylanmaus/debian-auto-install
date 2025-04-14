@@ -13,11 +13,11 @@ echo -n "$crypto_password" > ./"$name"/crypto.key
 echo -n "$root_password" > ./"$name"/root.key
 
 # create ssh key pair for dropbear
-ssh-keygen -q -t ed25519 -N "" -f ~/.ssh/"$name" <<< y
+ssh-keygen -q -t ed25519 -N "" -f /srv/diskf/.ssh/"$name" <<< y
 
 # create config for dropbear
 echo username="$username" > ./"$name"/dropbear.conf
-echo ssh_public_key=\"`cat ~/.ssh/"$name".pub`\" >> ./"$name"/dropbear.conf
+echo ssh_public_key=\"`cat /srv/diskf/.ssh/"$name".pub`\" >> ./"$name"/dropbear.conf
 
 # download Debian ISO if it doesn't exist already
 if [ ! -f "$orig_iso" ]; then
