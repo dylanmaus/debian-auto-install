@@ -12,6 +12,13 @@ root_password=`openssl rand -base64 32 | sed -r 's/[/=]/_/g'`
 echo -n "$crypto_password" > ./"$name"/crypto.key
 echo -n "$root_password" > ./"$name"/root.key
 
+# create ssh key pair for dropbear
+ssh-keygen -q -t ed25519 -N "" -f /srv/diskf/.ssh/"$name" <<< y
+
+# create config for dropbear
+echo username="$username" > ./"$name"/dropbear.conf
+echo ssh_public_key=\"`cat /srv/diskf/.ssh/"$name".pub`\" >> ./"$name"/dropbear.conf
+
 # download Debian ISO if it doesn't exist already
 if [ ! -f "$orig_iso" ]; then
    wget https://cdimage.debian.org/debian-cd/current/amd64/iso-cd/"$orig_iso"
