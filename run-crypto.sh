@@ -23,8 +23,6 @@ cp default-crypto-preseed.cfg "$name"/preseed.cfg
 
 # copy files to tmphost to serve during install
 cp ./"$name"/preseed.cfg ./tmphost
-cp ./"$name"/dropbear.conf ./tmphost
-cp ./post-preseed.sh ./tmphost
 
 # mount and unpack ISO to modifiable location
 ./mount-unpack-iso.sh "$orig_iso"
