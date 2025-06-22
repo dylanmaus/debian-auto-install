@@ -7,7 +7,7 @@
 read -s -p "Enter user password: " user_password
 
 # create files containing generated keys
-root_password=`openssl rand -base64 32 | sed -r 's/[/=]/_/g'`
+root_password=`openssl rand -base64 48`
 echo -n "$root_password" > ./"$name"/root.key
 
 # download Debian ISO if it doesn't exist already
